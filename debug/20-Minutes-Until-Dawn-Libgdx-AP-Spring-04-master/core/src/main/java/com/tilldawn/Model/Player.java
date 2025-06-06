@@ -76,6 +76,69 @@ public class Player {
                 position.x, position.y, velocity.x, velocity.y));
     }
 
+    public void setPlayerTexture(Texture playerTexture) {
+        this.playerTexture = playerTexture;
+    }
+
+    public void setPlayerSprite(Sprite playerSprite) {
+        this.playerSprite = playerSprite;
+    }
+
+    public CollisionRect getRect() {
+        return rect;
+    }
+
+    public void setRect(CollisionRect rect) {
+        this.rect = rect;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setPlayerIdle(boolean playerIdle) {
+        isPlayerIdle = playerIdle;
+    }
+
+    public void setPlayerRunning(boolean playerRunning) {
+        isPlayerRunning = playerRunning;
+    }
+
+    public void setHP(float HP) {
+        this.HP = HP;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setAbilities(List<AbilityType> abilities) {
+        this.abilities = abilities;
+    }
 
     public void handleInput() {
         velocity.set(0, 0);

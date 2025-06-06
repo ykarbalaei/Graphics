@@ -294,6 +294,13 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.R) {
+            if (!controller.getWeaponController().isReloading()) {
+                controller.getWeaponController().manualReload();
+            }
+            return true;
+
+        }
         if (keycode == Input.Keys.H) {
             controller.getPlayerController().getPlayer().increaseHP(10);
             Gdx.app.log("CHEAT", "Full HP activated!");

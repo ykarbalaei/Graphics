@@ -27,6 +27,10 @@ public class GameAssetManager {
     private Animation<TextureRegion> treeWalkAnim;
     private Texture[] treePowerupTexture = new Texture[2];
     public Sound shootSound;
+    private Texture hitEffectTexture;
+    private boolean showHitEffect = false;
+    private float hitEffectTimer = 0f;
+    private final float HIT_EFFECT_DURATION = 0.2f;
 
     private GameAssetManager() {
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
@@ -54,10 +58,17 @@ public class GameAssetManager {
         playerRunTexture = new Texture("1/characters/Run_0.png");
         smgTexture = new Texture("smg/SMGStill.png");
         bulletTexture = new Texture("bullet.png");
+        hitEffectTexture = new Texture(Gdx.files.internal("effects/hit_effect.png"));
+
         loadTreeAssets();
         loadCharacterAnimations();
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.wav"));
 
+    }
+
+    public void showHitEffect() {
+        showHitEffect = true;
+        hitEffectTimer = HIT_EFFECT_DURATION;
     }
 
     private void loadEyebatAnimations() {
@@ -222,5 +233,15 @@ public class GameAssetManager {
     public Animation<TextureRegion> getTreeIdleAnim() { return treeIdleAnim; }
     public Animation<TextureRegion> getCharacterIdleAnimation() { return characterIdleAnim; }
     public Animation<TextureRegion> getCharacterRunAnimation() { return characterRunAnim; }
+
+    private Animation<TextureRegion> weaponReloadAnim;
+
+    public void loadWeaponReloadAnimation() {
+        Array<TextureRegion> reloadFrames = new Array<>();
+        for (int i = 0; i < 4; i++) {
+            reloadFrames.add(new TextureRegion(new Texture("smg/Reload_" + i + ".png")));
+        }
+        weaponReloadAnim = new Animation<>(0.1f, reloadFrames);
+    }
 
 }

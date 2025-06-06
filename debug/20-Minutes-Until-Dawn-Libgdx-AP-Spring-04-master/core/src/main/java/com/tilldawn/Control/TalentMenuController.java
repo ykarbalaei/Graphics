@@ -1,18 +1,18 @@
 package com.tilldawn.Control;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
-import com.tilldawn.Model.Ability;
-import com.tilldawn.Model.GameSettings;
-import com.tilldawn.Model.HeroType;
+import com.tilldawn.Model.*;
 
 public class TalentMenuController {
     private final GameSettings settings;
+    private SettingsManager settingsManager=SettingsManager.getInstance();
 
     public TalentMenuController(GameSettings settings) {
         this.settings = settings;
     }
 
-    /** برمی‌گرداند لیستی از نام و توضیح حداقل ۳ هیرو برای بخش راهنما */
+
     public Array<String> getHeroGuides() {
         Array<String> guides = new Array<>();
         for (HeroType ht : HeroType.values()) {
@@ -22,39 +22,46 @@ public class TalentMenuController {
         return guides;
     }
 
-    /** کلیدهایی که کاربر در تنظیمات بازی از آنها استفاده می‌کند */
-    public Array<String> getActiveKeys() {
+
+        public Array<String> getActiveKeys() {
         Array<String> keys = new Array<>();
-        for (String key : settings.getKeyBindings()) {
-            keys.add(key);
+        keys.add( "Up: " + Input.Keys.toString(settingsManager.getKeyUp()));
+        keys.add( "Down: " + Input.Keys.toString(settingsManager.getKeyDown()));
+        keys.add( "Left: " + Input.Keys.toString(settingsManager.getKeyLeft()));
+        keys.add( "Right: " + Input.Keys.toString(settingsManager.getKeyRight()));
+            return keys;
         }
-        return keys;
-    }
 
 
-    /** لیست کدهای تقلب و توضیح کارکردشان */
+
+
     public Array<String> getCheats() {
         Array<String> cheats = new Array<>();
-        for (String code : settings.getCheatCodes()) {
-            cheats.add(code + " → " + lookupCheatEffect(code));
-        }
+            cheats.add("H: +10 HP");
+            cheats.add("L: +1 Life");
+            cheats.add("K: Kill all enemies");
+            cheats.add("X: +10 XP");
+            cheats.add("G: Infinite Ammo");
+
         return cheats;
     }
 
-    private String lookupCheatEffect(String code) {
-        switch (code) {
-            case "IDDQD": return "God Mode";
-            case "IDKFA": return "All Weapons";
-            default:      return "Unknown Effect";
-        }
-    }
+//    private String lookupCheatEffect(String code) {
+//        switch (code.toUpperCase()) {
+//            case "H": return "+10 HP";
+//            case "L": return "+1 Life";
+//            case "X": return "+10 XP";
+//            case "K": return "Kill All Enemies";
+//            case "G": return "Infinite Ammo";
+//            default:  return "Unknown Effect";
+//        }
+//    }
 
-    /** توانایی‌های به‌دست‌آمده و توضیح کارکردشان */
     public Array<String> getAbilities() {
-        Array<String> abs = new Array<>();
-        for (Ability a : settings.getAcquiredAbilities()) {
-            abs.add(a.getName() + ": " + a.getEffect());
+        Array<String> guides = new Array<>();
+        for (AbilityType ht : AbilityType.values()) {
+            guides.add(ht.getName() + ": " + ht.getDescription());
         }
-        return abs;
+        return guides;
     }
 }

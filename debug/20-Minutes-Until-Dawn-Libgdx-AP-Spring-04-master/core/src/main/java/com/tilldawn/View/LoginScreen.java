@@ -38,7 +38,7 @@ public class LoginScreen extends ScreenAdapter {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("background.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("background.gif"));
         backgroundImage = new Image(backgroundTexture);
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);

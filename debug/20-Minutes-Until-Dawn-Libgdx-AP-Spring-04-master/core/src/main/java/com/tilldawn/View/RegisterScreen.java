@@ -41,7 +41,7 @@ public class RegisterScreen extends ScreenAdapter {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("background.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("background.gif"));
 
         Table table = new Table();
         table.setFillParent(true);

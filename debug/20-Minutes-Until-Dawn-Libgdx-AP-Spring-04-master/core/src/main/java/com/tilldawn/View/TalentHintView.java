@@ -2,10 +2,12 @@ package com.tilldawn.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.MainMenuController;
@@ -39,40 +41,23 @@ public class TalentHintView implements Screen {
 
         Table table = new Table(skin);
         table.setFillParent(true);
-        table.top();
+        table.top().padTop(30);
 
-        table.add(title).colspan(2).padTop(20).padBottom(20).row();
+        // --- عنوان بالا ---
+        title.setFontScale(1.5f);
+        title.setAlignment(Align.center);
+        table.add(title).colspan(2).center().padBottom(25).row();
 
-        // --- Hero Guides ---
-        table.add(new Label("Hero Guides:", skin)).left().pad(5);
-        List<String> heroList = new List<>(skin);
-        heroList.setItems(controller.getHeroGuides());
-        heroList.getStyle().font.getData().setScale(0.85f);
-        table.add(new ScrollPane(heroList, skin)).width(700).height(175).pad(5).row();
+        // متد کمکی برای ساخت سکشن
+        addSection(table, "Hero Guides:", controller.getHeroGuides(), 180);
+        addSection(table, "Active Keys:", controller.getActiveKeys(), 180);
+        addSection(table, "Cheat Codes:", controller.getCheats(), 140);
+        addSection(table, "Abilities:", controller.getAbilities(), 180);
 
-        // --- Active Keys ---
-        table.add(new Label("Active Keys:", skin)).left().pad(5);
-        List<String> keyList = new List<>(skin);
-        keyList.setItems(controller.getActiveKeys());
-        keyList.getStyle().font.getData().setScale(0.85f);
-        table.add(new ScrollPane(keyList, skin)).width(700).height(175).pad(5).row();
+        // --- دکمه Back ---
+        backButton.getLabel().setFontScale(1.1f);
+        table.add(backButton).colspan(2).padTop(30).width(200).height(50);
 
-        // --- Cheat Codes ---
-        table.add(new Label("Cheat Codes:", skin)).left().pad(5);
-        List<String> cheatList = new List<>(skin);
-        cheatList.setItems(controller.getCheats());
-        cheatList.getStyle().font.getData().setScale(0.85f);
-        table.add(new ScrollPane(cheatList, skin)).width(700).height(125).pad(5).row();
-
-        // --- Abilities ---
-        table.add(new Label("Abilities:", skin)).left().pad(5);
-        List<String> abilityList = new List<>(skin);
-        abilityList.setItems(controller.getAbilities());
-        abilityList.getStyle().font.getData().setScale(0.85f);
-        table.add(new ScrollPane(abilityList, skin)).width(700).height(175).pad(5).row();
-
-        // --- Back Button ---
-        table.add(backButton).colspan(2).padTop(30);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
@@ -88,6 +73,20 @@ public class TalentHintView implements Screen {
         });
 
         stage.addActor(table);
+    }
+
+    private void addSection(Table table, String titleText, com.badlogic.gdx.utils.Array<String> items, int height) {
+        Label sectionLabel = new Label(titleText, skin);
+        sectionLabel.setFontScale(1.1f);
+        sectionLabel.setColor(Color.SKY);
+        table.add(sectionLabel).left().padBottom(5).padTop(10);
+
+        List<String> list = new List<>(skin);
+        list.setItems(items);
+        list.getStyle().font.getData().setScale(0.85f);
+        ScrollPane scroll = new ScrollPane(list, skin);
+        scroll.setScrollingDisabled(true, false);
+        table.add(scroll).width(700).height(height).pad(5).row();
     }
 
     @Override

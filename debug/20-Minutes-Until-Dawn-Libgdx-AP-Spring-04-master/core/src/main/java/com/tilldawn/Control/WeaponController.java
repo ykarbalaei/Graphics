@@ -2,7 +2,9 @@ package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.tilldawn.Main;
@@ -24,9 +26,13 @@ public class WeaponController {
     private final int maxAmmo;
     private boolean isReloading = false;
     private float reloadTimer = 0f;
-    private final float reloadDuration = 2.0f;
+    private  float reloadDuration = 2.0f;
     private boolean infiniteAmmo = false;
-//    private boolean showMuzzle = false;
+
+
+
+
+    //    private boolean showMuzzle = false;
 //    private float muzzleTimer = 0f;
 //    private final float muzzleDuration = 0.1f; // فقط برای ۰.۱ ثانیه نمایش داده میشه
 
@@ -43,6 +49,7 @@ public class WeaponController {
         this.enemyController = enemyController;
         this.maxAmmo = weapon.getMaxAmmo();
         this.currentAmmo = maxAmmo;
+        this.reloadDuration =weapon.getType().getReloadTime() ;
     }
 
     public void update(float delta) {
@@ -86,7 +93,9 @@ public class WeaponController {
         if (!infiniteAmmo) {
             if (weapon.getCurrentAmmo() <= 0) {
                 Gdx.app.log("Weapon", "No ammo! Reload required.");
-                startReload();
+                if (SettingsManager.getInstance().isReloadAutoEnabled()) {
+                    startReload();
+                }
                 return;
             }
             weapon.setCurrentAmmo(weapon.getCurrentAmmo() - 1);
@@ -130,6 +139,8 @@ public class WeaponController {
 
     }
 
+
+
     public void setInfiniteAmmo(boolean value) {
         this.infiniteAmmo = value;
     }
@@ -153,15 +164,32 @@ public class WeaponController {
     }
 
     private void startReload() {
+
         if (!isReloading) {
             isReloading = true;
             reloadTimer = 0f;
             Gdx.app.log("WeaponController", "🔄 Reloading started...");
         }
     }
+
+    public boolean isReloading() {
+        return isReloading;
+    }
+
+    public void manualReload() {
+        if (!isReloading && weapon.getCurrentAmmo() < maxAmmo) {
+            startReload();
+        }
+    }
+    private Animation<TextureRegion> reloadAnim;
+    private float reloadAnimTime = 0f;
     private void updateReload(float delta) {
         if (isReloading) {
             reloadTimer += delta;
+            // در زمان رسم:
+            TextureRegion currentFrame = reloadAnim.getKeyFrame(reloadAnimTime, true);
+            weapon.getSprite().setRegion(currentFrame);
+
             if (reloadTimer >= reloadDuration) {
                 currentAmmo = maxAmmo;
                 weapon.setCurrentAmmo(maxAmmo);
@@ -169,6 +197,9 @@ public class WeaponController {
                 Gdx.app.log("WeaponController", "✅ Reload complete. Ammo refilled.");
             }
         }
+    }
+    public boolean isInfiniteAmmo() {
+        return infiniteAmmo;
     }
     private void checkBulletCollisions() {
         Iterator<Bullet> iterator = bullets.iterator();

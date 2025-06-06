@@ -125,6 +125,7 @@ public class EyebatController {
 
                 if (bullet.isActive() && bullet.barkhord(player)) {
                     bullet.setActive(false);
+                    GameController.triggerHitEffect();
                     player.reduceHP(.5F);
                     Gdx.app.log("EYEBAT", "Bullet hit player!");
                     iterator.remove(); // ← گلوله رو حذف کن

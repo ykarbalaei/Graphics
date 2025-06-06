@@ -1,6 +1,7 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.tilldawn.Main;
 import com.tilldawn.Model.*;
@@ -17,6 +18,14 @@ public class GameController {
     private final UserManager userManager;
     private boolean isGameOver = false;
     private final Main game;
+    private Texture hitEffectTexture;
+    private static boolean showHitEffect = false;
+    private static float hitEffectTimer = 0f;
+    private static final float HIT_EFFECT_DURATION = 0.2f;
+//    private boolean showHitEffect = false;
+//    private float hitEffectTimer = 0f;
+//    private final float HIT_EFFECT_DURATION = 0.2f;
+
 
     private final GameSettings settings;
 
@@ -24,6 +33,18 @@ public class GameController {
         this.game = game;
         this.settings = settings;
         this.userManager = userManager;
+        hitEffectTexture = new Texture(Gdx.files.internal("effects/hit_effect.png"));
+
+    }
+
+    public static void triggerHitEffect() {
+        showHitEffect = true;
+        hitEffectTimer = HIT_EFFECT_DURATION;
+    }
+
+    public void showHitEffect() {
+        showHitEffect = true;
+        hitEffectTimer = HIT_EFFECT_DURATION;
     }
 
     public Main getGame() {
@@ -68,6 +89,14 @@ public class GameController {
             } else {
                 worldController.render();
                 playerController.getPlayer().render();
+                Player player = playerController.getPlayer();
+                Main.getBatch().draw(player.getPlayerTexture(), player.getX(), player.getY(),0.01f, 0.01f);
+
+                if (showHitEffect) {
+                    Main.getBatch().draw(hitEffectTexture, player.getX(), player.getY());
+                }
+
+
                 enemyController.render();
                 weaponController.render();
             }
@@ -106,6 +135,13 @@ public class GameController {
                 return;
             }
             playerController.update(delta);
+            if (showHitEffect) {
+                hitEffectTimer -= delta;
+                if (hitEffectTimer <= 0) {
+                    showHitEffect = false;
+                }
+            }
+
             weaponController.update(delta);
             enemyController.update(delta);
             worldController.update(delta);
